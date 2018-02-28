@@ -74,22 +74,27 @@ function getTable(route, target, headers) {
     xmlHttpReq('GET', route, '', function(responseText) {
         var response = JSON.parse(responseText);
         if (response.success) {
-            var cont = document.getElementById(target);
             var data = response.data;
-            var res = "<table><tr>";
+            var table = document.createElement('table');
+            var tr = document.createElement('tr');
             for (var head in headers) {
-                res += "<th>" + headers[head] + "</th>";
+                var th = document.createElement('th');
+                th.innerText = headers[head];
+                tr.appendChild(th);
             }
-            res += "</tr>";
+            table.appendChild(tr);
             for (var trans in data) {
-                res += "<tr>";
+                var tr = document.createElement('tr');
                 for (var i = 0; i < data[trans].length; i++) {
-                    res += "<td>" + data[trans][i] + "</td>";
+                    var td = document.createElement('td');
+                    td.innerText = data[trans][i];
+                    tr.appendChild(td);
                 }
-                res += "</tr>";
+                table.appendChild(tr);
             }
-            res += "</table>";
-            cont.innerHTML = res;
+            var cont = document.getElementById(target);
+            cont.innerHTML = "";
+            cont.appendChild(table);
         } else {
             snackbar(response.message);
         }
